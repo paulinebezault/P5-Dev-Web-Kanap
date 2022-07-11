@@ -6,11 +6,26 @@ function deleteItem(id,color){
     localStorage.setItem("cart", JSON.stringify(currentCart));
     location.reload();
 }
+
+function modifyItem(id,color){
+  let index = currentCart.findIndex((item) => item.id === id && item.selectedColor === color);
+  let newQuantity = document.getElementById("quantity_" + id).value;
+  currentCart[index].selectedQuantity = newQuantity;
+  localStorage.setItem("cart", JSON.stringify(currentCart));
+    location.reload();
+}
+
+let totalQuantity=0;
+let totalPrice=0;
+
 currentCart.forEach((itemCart, /*index, array fonction complète mais pas besoin la plupart du temps, revient à récupérer index=i*/) => {
     let items = document.getElementById("cart__items");
     fetch(`http://localhost:3000/api/products/${itemCart.id}`) // fait la requete avec l'id en paramètre
         .then(response => response.json())
         .then(data => {
+            totalQuantity += parseInt(itemCart.selectedQuantity); //on incrémente totalQuantity de la quantité sélectionnée de cet élément du panier
+            totalPrice += parseInt(data.price)*parseInt(itemCart.selectedQuantity); // on incrémente totalPrice du prix de cet élément du panier
+            console.log(totalPrice);
             items.innerHTML += `<article class="cart__item" data-id="${itemCart.id}" data-color="${itemCart.selectedColor}">
     <div class="cart__item__img">
       <img src="${data.imageUrl}" alt="${data.altTxt}">
@@ -24,7 +39,7 @@ currentCart.forEach((itemCart, /*index, array fonction complète mais pas besoin
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
           <p>Qté : </p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${itemCart.selectedQuantity}">
+          <input type="number" class="itemQuantity" name="itemQuantity" id="quantity_${itemCart.id}" onchange="modifyItem('${itemCart.id}', '${itemCart.selectedColor}')" min="1" max="100" value="${itemCart.selectedQuantity}">
         </div>
         <div class="cart__item__content__settings__delete">
           <p class="deleteItem" onclick="deleteItem('${itemCart.id}', '${itemCart.selectedColor}')" >Supprimer</p>
@@ -32,5 +47,8 @@ currentCart.forEach((itemCart, /*index, array fonction complète mais pas besoin
       </div>
     </div>
   </article>`
-        })
+        document.getElementById("totalQuantity").innerHTML=totalQuantity;
+        document.getElementById("totalPrice").innerHTML=totalPrice;
+      })
+        
 })
