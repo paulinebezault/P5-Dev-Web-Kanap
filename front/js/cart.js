@@ -18,7 +18,7 @@ function modifyItem(id,color){
 let totalQuantity=0;
 let totalPrice=0;
 
-currentCart.forEach((itemCart, /*index, array fonction complète mais pas besoin la plupart du temps, revient à récupérer index=i*/) => {
+currentCart.forEach((itemCart, /*index, array) fonction complète mais pas besoin la plupart du temps, revient à récupérer index=i*/) => {
     let items = document.getElementById("cart__items");
     fetch(`http://localhost:3000/api/products/${itemCart.id}`) // fait la requete avec l'id en paramètre
         .then(response => response.json())
@@ -52,3 +52,94 @@ currentCart.forEach((itemCart, /*index, array fonction complète mais pas besoin
       })
         
 })
+
+const firstName = document.getElementById("firstName");
+const firstNameErrorMessage = document.getElementById("firstNameErrorMsg");
+const lastName = document.getElementById("lastName");
+const lastNameErrorMessage = document.getElementById("lastNameErrorMsg");
+const address = document.getElementById("address");
+const addressErrorMessage = document.getElementById("addressErrorMsg");
+const city = document.getElementById("city");
+const cityErrorMessage = document.getElementById("cityErrorMsg");
+const email = document.getElementById("email");
+const emailErrorMessage = document.getElementById("emailErrorMsg");
+const orderButton = document.getElementById("order");
+
+firstName.addEventListener("change",(event)=>{ //on récupère les modif de firstName
+  let value=event.target.value; //on récupère ce qu'on écrit à l'intérieur du champ
+  if(value.trim()=="")/*supprime les espaces et les sauts de lignes*/{
+    firstNameErrorMessage.innerHTML = `Le prénom ne peut pas être vide`;
+    
+  }else{
+    firstNameErrorMessage.innerHTML="";
+    
+  }
+});
+
+lastName.addEventListener("change",(event)=>{ //on récupère les modif de firstName
+  let value=event.target.value; //on récupère ce qu'on écrit à l'intérieur du champ
+  if(value.trim()=="")/*supprime les espaces et les sauts de lignes*/{
+    lastNameErrorMessage.innerHTML = `Le nom ne peut pas être vide`;
+    
+  }else{
+    lastNameErrorMessage.innerHTML="";
+    
+  }
+});
+
+address.addEventListener("change",(event)=>{ 
+  let value=event.target.value;
+  if(value.trim()==""){
+    addressErrorMessage.innerHTML = `L'adresse ne peut pas être vide`;
+    
+  }else{
+    adressErrorMessage.innerHTML="";
+    
+  }
+});
+
+city.addEventListener("change",(event)=>{ 
+  let value=event.target.value;
+  if(value.trim()==""){
+    cityErrorMessage.innerHTML = `La ville ne peut pas être vide`;
+    
+  }else{
+    cityErrorMessage.innerHTML="";
+    
+  }
+});
+
+email.addEventListener("change",(event)=>{ 
+  let value=event.target.value;
+  if(value.trim()==""){
+    emailErrorMessage.innerHTML = `L'email ne peut pas être vide`;
+    
+  }else{
+    emailErrorMessage.innerHTML="";
+    
+  }
+});
+
+orderButton.addEventListener("click",(event)=>{
+  /*vérification des champs*/
+
+  fetch(`http://localhost:3000/api/products/order`,{
+    method:"POST",
+    headers:{
+      "Accept":"application/json",
+      "Content-Type": "application/json"
+    }, //ce qu'on envoie c'est du JSON
+    body: JSON.stringify({
+      contact:{
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value
+      },
+      products: currentCart.map((currentItemCart)=>currentItemCart.id) //mapping de tous les objets vers tous les id des objets
+    })
+  }).then(result=>console.log(result))
+  .catch(error=>console.error(error))//différence de couleur d'écriture
+})
+
