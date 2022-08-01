@@ -1,7 +1,7 @@
 
 fetch("http://localhost:3000/api/products")
   .then(response => response.json())
-  /*fetch a récup la donnée à l'url donnée, 
+  /*fetch récupère la donnée à l'url donnée, 
   quand il a résolu il va dans le then; 
   il attribut le résultat dans la variable response puis la convertit*/
   .then(data => {
