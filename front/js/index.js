@@ -3,7 +3,7 @@ fetch("http://localhost:3000/api/products")
   .then(response => response.json())
   /*fetch récupère la donnée à l'url donnée, 
   quand il a résolu il va dans le then; 
-  il attribut le résultat dans la variable response puis la convertit*/
+  il attribut le résultat dans la variable response puis la convertit en JSON*/
   .then(data => {
     const DOMItems = document.getElementById("items")
     for (let i = 0; i <= data.length; i++) {

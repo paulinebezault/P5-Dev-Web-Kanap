@@ -20,14 +20,18 @@ function modifyItem(id, color) {
 let totalQuantity = 0;
 let totalPrice = 0;
 
-currentCart.forEach((itemCart, /*index, array) fonction complète mais pas besoin la plupart du temps, revient à récupérer index=i*/) => {
+currentCart.forEach((itemCart, /*index, array) fonction complète mais pas besoin la plupart du temps, 
+revient à récupérer index=i*/) => {
   let items = document.getElementById("cart__items");
   fetch(`http://localhost:3000/api/products/${itemCart.id}`) // fait la requete avec l'id en paramètre
     .then(response => response.json())
     .then(data => {
-      totalQuantity += parseInt(itemCart.selectedQuantity); //on incrémente totalQuantity de la quantité sélectionnée de cet élément du panier
-      totalPrice += parseInt(data.price) * parseInt(itemCart.selectedQuantity); // on incrémente totalPrice du prix de cet élément du panier
-      items.innerHTML += `<article class="cart__item" data-id="${itemCart.id}" data-color="${itemCart.selectedColor}">
+      totalQuantity += parseInt(itemCart.selectedQuantity); 
+      //on incrémente totalQuantity de la quantité sélectionnée de cet élément du panier
+      totalPrice += parseInt(data.price) * parseInt(itemCart.selectedQuantity); 
+      // on incrémente totalPrice du prix de cet élément du panier
+      items.innerHTML += `<article class="cart__item" data-id="${itemCart.id}" 
+      data-color="${itemCart.selectedColor}">
     <div class="cart__item__img">
       <img src="${data.imageUrl}" alt="${data.altTxt}">
     </div>
@@ -143,13 +147,15 @@ orderButton.addEventListener("click", (event) => {
           city: city.value,
           email: email.value
         },
-        products: currentCart.map((currentItemCart) => currentItemCart.id) //mapping de tous les objets vers tous les id des objets
+        products: currentCart.map((currentItemCart) => currentItemCart.id) 
+        //mapping de tous les objets vers tous les id des objets
       })
     })
       .then(response => response.json())
       .then(data => {
         let orderId = data.orderId;
-        window.location.replace(`/front/html/confirmation.html?orderId=${orderId}`) //redirection vers une url
+        window.location.replace(`/front/html/confirmation.html?orderId=${orderId}`) 
+        //redirection vers une url
         localStorage.setItem("cart", JSON.stringify([]));//vidage du panier
       })
       .catch(error => console.error(error))//différence de couleur d'écriture
